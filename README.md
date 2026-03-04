@@ -3,6 +3,8 @@
 > Inspired by KNIME — but made for the cloud, and built to survive.  
 > No desktop. No install. Just resilient workflows, in your browser.
 
+<img src"docs/gifs/logo-ani.gif" width="40" height="40">
+
 **Visual workflows that actually run — and survive.**
 
 Start with a drop.  
@@ -25,13 +27,13 @@ even if Kafka dies, even if S3 lags, even if your code crashes.
 
 ## How
 
-- **Canvas:** Eclipse Theia + React Flow — drag, drop, real IDE feel  
-- **Engine:** Temporal — durable execution, auto-retry, infinite scale  
+- **Canvas:** [Eclipse Theia](https://theia-ide.org/) + [React Flow](https://reactflow.dev/) — drag, drop, real IDE feel  
+- **Engine:** [Temporal](https://temporal.io) — durable execution, auto-retry, infinite scale  
 - **Events:** Kafka → MQTT over WebSockets — live step-by-step updates  
 - **Data:** Parquet tables between nodes — fast, columnar, query-ready  
 - **Storage:** AWS S3 (or MinIO for local) — open, no lock-in  
 - **Backend:** Kotlin + Spring Boot — typed, clean, contract-safe  
-- **Resilience:** Temporal owns it. Fails? Retries. Forever.  
+- **Resilience:** [Temporal](https://temporal.io/) owns it. Fails? Retries. Forever.  
 - **Flow Control:** Output `null` on a port = flow stops. Simple guard. Real loops coming.
 
 ## What’s Missing (and what we want)
