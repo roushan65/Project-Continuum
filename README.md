@@ -227,6 +227,18 @@ This is the vision: **a marketplace of workers** — lightweight, independent, c
 
 ---
 
+## 📺 YouTube Channel — Coming Soon
+
+We're launching a dedicated YouTube channel with deep dives, demos, and architecture walkthroughs. Subscribe to stay in the loop:
+
+- 🎥 **Live workflow builds** — watch real pipelines come together from scratch
+- 🧠 **Architecture breakdowns** — how Temporal, Kafka, and the worker ecosystem fit together
+- 💬 **Community discussions** — Q&A, roadmap talks, and contributor spotlights
+
+> 🔔 Channel link dropping soon — star the repo so you don't miss it!
+
+---
+
 ## 🤝 Contribute
 
 We don't want perfect. We want **working**.
