@@ -1,9 +1,11 @@
-# Continuum
+# Project Continuum
 
 > Inspired by KNIME — but made for the cloud, and built to survive.  
 > No desktop. No install. Just resilient workflows, in your browser.
 
-<img src"docs/gifs/logo-ani.gif" width="40" height="40"/>
+<p align="center">
+  <img src="docs/gifs/logo-ani.gif" width="25%">
+</p>
 
 **Visual workflows that actually run — and survive.**
 
