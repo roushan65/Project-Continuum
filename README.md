@@ -1,6 +1,6 @@
 # Continuum
 
-> Inspired by KNIME — but made for the web, and built to survive.  
+> Inspired by KNIME — but made for the cloud, and built to survive.  
 > No desktop. No install. Just resilient workflows, in your browser.
 
 **Visual workflows that actually run — and survive.**
@@ -49,8 +49,8 @@ even if Kafka dies, even if S3 lags, even if your code crashes.
 
 Heading for:  
 - True while/for loops with condition builder  
-- Live simulation (dry-run mode) — test without firing Kafka/S3  
-- Import from KNIME, n8n, Zapier  
+- Implement more RDKit nodes
+- Implement full AI training node suite using Unsloth
 - Zero-config self-host with Docker  
 
 If you see the gap — fill it.  
@@ -59,7 +59,7 @@ We want working.
 
 ## Contribute
 
-See CONTRIBUTING.md
+See Issues page!
 
 ## License
 
