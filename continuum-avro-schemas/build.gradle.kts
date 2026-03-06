@@ -9,6 +9,12 @@ val baseVersion = "0.0.1"
 val isRelease = System.getenv("IS_RELEASE_BUILD")?.toBoolean() ?: false
 version = if (isRelease) baseVersion else "$baseVersion-SNAPSHOT"
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
