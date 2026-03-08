@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     kotlin("jvm") version "2.1.0"
     kotlin("plugin.spring") version "1.9.25"
@@ -125,7 +127,7 @@ jib {
 signing {
     val signingKeyId = System.getenv("GPG_KEY_ID")
     val signingKeyBase64 = System.getenv("GPG_KEY_BASE64")
-    val signingKey = signingKeyBase64?.let { String(java.util.Base64.getDecoder().decode(it)) }
+    val signingKey: String? = signingKeyBase64?.let { String(Base64.getDecoder().decode(it)) }
     val signingPassword = System.getenv("GPG_KEY_PASSWORD")
     isRequired = !signingKey.isNullOrBlank()
     if (isRequired) {
