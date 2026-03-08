@@ -114,8 +114,7 @@ jib {
     }
 
     to {
-      val repoName = (System.getenv("GITHUB_REPOSITORY") ?: property("repoName").toString()).lowercase()
-      image = "docker.io/$repoName:${project.version}"
+      image = "docker.io/projectcontinuum/${project.name.lowercase()}:${project.version}"
       auth {
         username = System.getenv("DOCKER_REPO_USERNAME") ?: ""
         password = System.getenv("DOCKER_REPO_PASSWORD") ?: ""
