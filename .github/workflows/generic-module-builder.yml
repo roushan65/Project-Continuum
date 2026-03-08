@@ -19,6 +19,15 @@ on:
       MAVEN_REPO_PASSWORD:
         description: 'Password for publishing to Maven repository'
         required: true
+      GPG_KEY_ID:
+        description: 'GPG key ID for signing artifacts'
+        required: true
+      GPG_KEY_PASSWORD:
+        description: 'Password for the GPG key'
+        required: true
+      GPG_KEY_BASE64:
+        description: 'Base64-encoded GPG private key for signing artifacts'
+        required: true
       DOCKER_HUB_USERNAME:
         description: 'Docker Hub username for pushing container images'
         required: true
@@ -67,6 +76,9 @@ jobs:
           IS_RELEASE_BUILD: ${{ inputs.release }}
           MAVEN_REPO_USERNAME: ${{ github.actor }}
           MAVEN_REPO_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_KEY_PASSWORD: ${{ secrets.GPG_KEY_PASSWORD }}
+          GPG_KEY_BASE64: ${{ secrets.GPG_KEY_BASE64 }}
 
       - name: Containerize
         if: always()
@@ -86,3 +98,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DOCKER_REPO_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_REPO_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_KEY_PASSWORD: ${{ secrets.GPG_KEY_PASSWORD }}
+          GPG_KEY_BASE64: ${{ secrets.GPG_KEY_BASE64 }}
