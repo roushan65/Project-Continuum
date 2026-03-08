@@ -19,6 +19,8 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -91,6 +93,24 @@ publishing {
                 name.set(project.name)
                 description.set(project.description)
                 url.set("https://github.com/$repoName")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("continuum-developer")
+                        name.set("Continuum Developer")
+                        email.set("projectdevcontinuum@gmail.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/$repoName.git")
+                    developerConnection.set("scm:git:ssh://github.com/$repoName.git")
+                    url.set("https://github.com/$repoName")
+                }
             }
         }
     }
