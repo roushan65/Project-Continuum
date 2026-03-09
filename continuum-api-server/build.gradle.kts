@@ -5,7 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.6"
     `maven-publish`
     id("com.google.cloud.tools.jib") version "3.4.1"
-    id("org.jreleaser") version "1.17.0"
+    id("org.jreleaser") version "1.23.0"
 }
 
 group = "org.projectcontinuum.core"
@@ -118,6 +118,14 @@ publishing {
             name = "localStaging"
             url = uri(layout.buildDirectory.dir("staging-deploy"))
         }
+        maven {
+            name = "SonatypeSnapshots"
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            credentials {
+                username = System.getenv("MAVEN_REPO_USERNAME") ?: ""
+                password = System.getenv("MAVEN_REPO_PASSWORD") ?: ""
+            }
+        }
     }
 }
 
@@ -147,6 +155,8 @@ jreleaser {
                     active.set(org.jreleaser.model.Active.ALWAYS)
                     url.set("https://central.sonatype.com/api/v1/publisher")
                     stagingRepository("build/staging-deploy")
+                    retryDelay.set(0)
+                    maxRetries.set(0)
                 }
             }
         }
