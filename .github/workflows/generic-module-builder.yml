@@ -94,7 +94,11 @@ jobs:
           if [ "${{ inputs.module-name }}" = "all" ]; then
             ./gradlew publish --no-daemon
           else
-            ./gradlew :${{ inputs.module-name }}:publish --no-daemon
+            if ./gradlew :${{ inputs.module-name }}:tasks --all | grep -q "^publish "; then
+              ./gradlew :${{ inputs.module-name }}:publish --no-daemon
+            else
+              echo "Publish task does not exist for module ${{ inputs.module-name }}, skipping."
+            fi
           fi
         env:
           IS_RELEASE_BUILD: ${{ inputs.release }}
@@ -105,9 +109,13 @@ jobs:
         if: inputs.publish_to_maven && inputs.release
         run: |
           if [ "${{ inputs.module-name }}" = "all" ]; then
-            ./gradlew :continuum-api-server:jreleaserDeploy --no-daemon
+            ./gradlew jreleaserDeploy --no-daemon
           else
-            ./gradlew :${{ inputs.module-name }}:jreleaserDeploy --no-daemon
+            if ./gradlew :${{ inputs.module-name }}:tasks --all | grep -q "jreleaserDeploy"; then
+              ./gradlew :${{ inputs.module-name }}:jreleaserDeploy --no-daemon
+            else
+              echo "JReleaser task does not exist for module ${{ inputs.module-name }}, skipping."
+            fi
           fi
         env:
           IS_RELEASE_BUILD: ${{ inputs.release }}
@@ -121,9 +129,9 @@ jobs:
         if: inputs.publish_to_docker_hub
         run: |
           if [ "${{ inputs.module-name }}" = "all" ]; then
-            ./gradlew jib --no-daemon || echo "Some modules may not have jib tasks, continuing."
+            ./gradlew jib --no-daemon
           else
-            if ./gradlew :${{ inputs.module-name }}:tasks --all | grep -q "jib "; then
+            if ./gradlew :${{ inputs.module-name }}:tasks --all | grep -q "^jib "; then
               ./gradlew :${{ inputs.module-name }}:jib --no-daemon
             else
               echo "Jib task does not exist for module ${{ inputs.module-name }}, skipping."
