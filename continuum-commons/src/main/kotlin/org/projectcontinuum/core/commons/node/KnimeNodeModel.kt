@@ -1,7 +1,7 @@
 package org.projectcontinuum.core.commons.node
 
 import org.projectcontinuum.core.commons.model.ContinuumWorkflowModel
-import org.projectcontinuum.core.commons.progress.NodeProgressCallback
+import org.projectcontinuum.core.commons.protocol.progress.NodeProgressCallback
 import org.projectcontinuum.core.commons.utils.NodeInputReader
 import org.projectcontinuum.core.commons.utils.NodeOutputWriter
 import org.projectcontinuum.core.commons.utils.TemplateHelper

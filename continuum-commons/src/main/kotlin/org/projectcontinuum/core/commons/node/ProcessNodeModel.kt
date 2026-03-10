@@ -1,12 +1,12 @@
 package org.projectcontinuum.core.commons.node
 
 import org.projectcontinuum.core.commons.model.ContinuumWorkflowModel
-import org.projectcontinuum.core.commons.progress.NodeProgressCallback
+import org.projectcontinuum.core.commons.protocol.progress.NodeProgressCallback
 import org.projectcontinuum.core.commons.utils.NodeInputReader
 import org.projectcontinuum.core.commons.utils.NodeOutputWriter
 import org.projectcontinuum.core.commons.utils.ValidationHelper
 import jakarta.annotation.PostConstruct
-import org.projectcontinuum.core.commons.progress.NodeProgress
+import org.projectcontinuum.core.commons.protocol.progress.NodeProgress
 
 abstract class ProcessNodeModel : ContinuumNodeModel {
   /**

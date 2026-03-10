@@ -1,4 +1,4 @@
-package org.projectcontinuum.core.commons.progress
+package org.projectcontinuum.core.commons.protocol.progress
 
 interface NodeProgressCallback {
   fun report(

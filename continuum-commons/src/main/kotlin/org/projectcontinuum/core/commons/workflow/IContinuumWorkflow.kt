@@ -3,7 +3,7 @@ package org.projectcontinuum.core.commons.workflow
 import org.projectcontinuum.core.commons.model.ContinuumWorkflowModel
 import org.projectcontinuum.core.commons.model.PortData
 import org.projectcontinuum.core.commons.model.WorkflowSnapshot
-import org.projectcontinuum.core.commons.progress.ContinuumNodeActivitySignal
+import org.projectcontinuum.core.commons.protocol.progress.ContinuumNodeActivitySignal
 import io.temporal.common.SearchAttributeKey
 import io.temporal.workflow.QueryMethod
 import io.temporal.workflow.SignalMethod

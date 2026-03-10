@@ -1,6 +1,6 @@
 package org.projectcontinuum.core.worker.starter.model
 
-import org.projectcontinuum.core.commons.progress.NodeProgress
+import org.projectcontinuum.core.commons.protocol.progress.NodeProgress
 
 /**
  * Data class representing a heartbeat from a Continuum node activity.

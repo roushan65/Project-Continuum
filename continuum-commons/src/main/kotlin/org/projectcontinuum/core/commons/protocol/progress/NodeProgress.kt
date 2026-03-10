@@ -1,4 +1,4 @@
-package org.projectcontinuum.core.commons.progress
+package org.projectcontinuum.core.commons.protocol.progress
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty

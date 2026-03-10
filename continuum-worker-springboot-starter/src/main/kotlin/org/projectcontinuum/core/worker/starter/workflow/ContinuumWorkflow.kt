@@ -3,7 +3,7 @@ package org.projectcontinuum.core.worker.starter.workflow
 import org.projectcontinuum.core.commons.activity.IContinuumNodeActivity
 import org.projectcontinuum.core.commons.constant.TaskQueues
 import org.projectcontinuum.core.commons.constant.TaskQueues.WORKFLOW_TASK_QUEUE
-import org.projectcontinuum.core.commons.progress.ContinuumNodeActivitySignal
+import org.projectcontinuum.core.commons.protocol.progress.ContinuumNodeActivitySignal
 import org.projectcontinuum.core.commons.workflow.IContinuumWorkflow
 import org.projectcontinuum.core.worker.starter.utils.StatusHelper
 import com.fasterxml.jackson.databind.ObjectMapper

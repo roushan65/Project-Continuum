@@ -1,6 +1,6 @@
 package org.projectcontinuum.core.commons.model
 
-import org.projectcontinuum.core.commons.progress.NodeProgress
+import org.projectcontinuum.core.commons.protocol.progress.NodeProgress
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty

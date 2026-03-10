@@ -8,10 +8,10 @@ import org.projectcontinuum.core.commons.model.PortData
 import org.projectcontinuum.core.commons.model.PortDataStatus
 import org.projectcontinuum.core.commons.node.ProcessNodeModel
 import org.projectcontinuum.core.commons.node.TriggerNodeModel
-import org.projectcontinuum.core.commons.progress.ContinuumNodeActivitySignal
-import org.projectcontinuum.core.commons.progress.NodeProgress
-import org.projectcontinuum.core.commons.progress.NodeProgressCallback
-import org.projectcontinuum.core.commons.progress.StageStatus
+import org.projectcontinuum.core.commons.protocol.progress.ContinuumNodeActivitySignal
+import org.projectcontinuum.core.commons.protocol.progress.NodeProgress
+import org.projectcontinuum.core.commons.protocol.progress.NodeProgressCallback
+import org.projectcontinuum.core.commons.protocol.progress.StageStatus
 import org.projectcontinuum.core.commons.utils.NodeInputReader
 import org.projectcontinuum.core.commons.utils.NodeOutputWriter
 import org.projectcontinuum.core.commons.workflow.IContinuumWorkflow
