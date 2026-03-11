@@ -63,136 +63,149 @@ class NodeExplorerServiceTest {
     )
   }
 
-  // --- getChildren("") — root level ---
+  // --- getChildren("") — returns full hierarchical tree ---
 
   @Test
-  fun `getChildren with empty parentId returns root categories`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(
-      listOf("Filter & Select", "Processing", "Transform")
-    )
-    whenever(repository.findByEmptyCategories()).thenReturn(emptyList())
+  fun `getChildren with empty parentId returns hierarchical tree`() {
+    val node1 = createEntity("org.test.JointNode", "Joint Node", categories = listOf("Processing"))
+    val node2 = createEntity("org.test.FilterNode", "Filter Node", categories = listOf("Processing/KNIME"))
+    val node3 = createEntity("org.test.RootNode", "Root Node")
+    whenever(repository.findAll()).thenReturn(listOf(node1, node2, node3))
 
     val result = service.getChildren("")
 
-    assertEquals(3, result.size)
-    assertTrue(result.all { it.type == NodeExplorerItemType.CATEGORY })
-    assertTrue(result.all { it.hasChildren })
-    assertEquals("Filter & Select", result[0].name)
-    assertEquals("Processing", result[1].name)
-    assertEquals("Transform", result[2].name)
+    // Root level: "Processing" category + uncategorized "Root Node"
+    assertEquals(2, result.size)
+    assertEquals(NodeExplorerItemType.CATEGORY, result[0].type)
+    assertEquals("Processing", result[0].name)
+    assertTrue(result[0].hasChildren)
+    assertEquals(NodeExplorerItemType.NODE, result[1].type)
+    assertEquals("Root Node", result[1].name)
+
+    // Processing has KNIME subcategory + Joint Node
+    val processingChildren = result[0].children!!
+    assertEquals(2, processingChildren.size)
+    assertEquals(NodeExplorerItemType.CATEGORY, processingChildren[0].type)
+    assertEquals("KNIME", processingChildren[0].name)
+    assertEquals("Processing/KNIME", processingChildren[0].id)
+    assertEquals(NodeExplorerItemType.NODE, processingChildren[1].type)
+    assertEquals("Joint Node", processingChildren[1].name)
+
+    // KNIME subcategory has Filter Node
+    val knimeChildren = processingChildren[0].children!!
+    assertEquals(1, knimeChildren.size)
+    assertEquals("Filter Node", knimeChildren[0].name)
   }
 
   @Test
-  fun `getChildren with empty parentId includes root-level uncategorized nodes`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(listOf("Processing"))
-    val rootNode = createEntity("org.test.RootNode", "Root Node")
-    whenever(repository.findByEmptyCategories()).thenReturn(listOf(rootNode))
+  fun `getChildren with empty parentId places node in multiple categories`() {
+    val node = createEntity("org.test.MultiNode", "Multi Node", categories = listOf("Processing", "Transform"))
+    whenever(repository.findAll()).thenReturn(listOf(node))
 
     val result = service.getChildren("")
 
     assertEquals(2, result.size)
-    assertEquals(NodeExplorerItemType.CATEGORY, result[0].type)
     assertEquals("Processing", result[0].name)
-    assertEquals(NodeExplorerItemType.NODE, result[1].type)
-    assertEquals("Root Node", result[1].name)
-    assertEquals("org.test.RootNode", result[1].id)
+    assertEquals("Transform", result[1].name)
+    assertEquals(1, result[0].children!!.size)
+    assertEquals("Multi Node", result[0].children!![0].name)
+    assertEquals(1, result[1].children!!.size)
+    assertEquals("Multi Node", result[1].children!![0].name)
   }
 
   @Test
-  fun `getChildren with empty parentId deduplicates root categories from hierarchical paths`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(
-      listOf("Processing", "Processing/KNIME", "Processing/Custom")
-    )
-    whenever(repository.findByEmptyCategories()).thenReturn(emptyList())
+  fun `getChildren with empty parentId handles deeply nested category paths`() {
+    val node = createEntity("org.test.DeepNode", "Deep Node", categories = listOf("A/B/C"))
+    whenever(repository.findAll()).thenReturn(listOf(node))
 
     val result = service.getChildren("")
 
     assertEquals(1, result.size)
-    assertEquals("Processing", result[0].name)
-    assertEquals("Processing", result[0].id)
-    assertTrue(result[0].hasChildren)
+    assertEquals("A", result[0].name)
+    assertEquals("A", result[0].id)
+    val bLevel = result[0].children!!
+    assertEquals(1, bLevel.size)
+    assertEquals("B", bLevel[0].name)
+    assertEquals("A/B", bLevel[0].id)
+    val cLevel = bLevel[0].children!!
+    assertEquals(1, cLevel.size)
+    assertEquals("C", cLevel[0].name)
+    assertEquals("A/B/C", cLevel[0].id)
+    val leafLevel = cLevel[0].children!!
+    assertEquals(1, leafLevel.size)
+    assertEquals("Deep Node", leafLevel[0].name)
   }
 
   @Test
   fun `getChildren with empty parentId returns empty when no nodes registered`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(emptyList())
-    whenever(repository.findByEmptyCategories()).thenReturn(emptyList())
+    whenever(repository.findAll()).thenReturn(emptyList())
 
     val result = service.getChildren("")
 
     assertTrue(result.isEmpty())
   }
 
-  // --- getChildren("Processing") — category level ---
-
   @Test
-  fun `getChildren for category returns nodes with matching category`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(listOf("Processing"))
-    val node = createEntity("org.test.JointNode", "Joint Node", categories = listOf("Processing"))
-    whenever(repository.findByCategoriesContaining(any())).thenReturn(listOf(node))
+  fun `getChildren with empty parentId sorts categories before nodes alphabetically`() {
+    val nodeA = createEntity("org.test.ZNode", "Z Node", categories = listOf("Zebra"))
+    val nodeB = createEntity("org.test.ANode", "A Node", categories = listOf("Alpha"))
+    val nodeC = createEntity("org.test.RootNode", "Root Node")
+    whenever(repository.findAll()).thenReturn(listOf(nodeA, nodeB, nodeC))
 
-    val result = service.getChildren("Processing")
+    val result = service.getChildren("")
 
-    assertEquals(1, result.size)
-    assertEquals(NodeExplorerItemType.NODE, result[0].type)
-    assertEquals("Joint Node", result[0].name)
-    assertEquals("org.test.JointNode", result[0].id)
-    assertEquals(false, result[0].hasChildren)
+    assertEquals(3, result.size)
+    assertEquals("Alpha", result[0].name)
+    assertEquals("Zebra", result[1].name)
+    assertEquals("Root Node", result[2].name)
   }
 
+  // --- getChildren("Processing") — returns subtree children ---
+
   @Test
-  fun `getChildren for category returns sub-categories and nodes`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(
-      listOf("Processing", "Processing/KNIME")
-    )
-    val node = createEntity("org.test.SplitNode", "Split Node", categories = listOf("Processing"))
-    whenever(repository.findByCategoriesContaining(any())).thenReturn(listOf(node))
+  fun `getChildren with parentId returns children of that category`() {
+    val node1 = createEntity("org.test.JointNode", "Joint Node", categories = listOf("Processing"))
+    val node2 = createEntity("org.test.FilterNode", "Filter Node", categories = listOf("Processing/KNIME"))
+    whenever(repository.findAll()).thenReturn(listOf(node1, node2))
 
     val result = service.getChildren("Processing")
 
     assertEquals(2, result.size)
-    // Sub-category first
     assertEquals(NodeExplorerItemType.CATEGORY, result[0].type)
     assertEquals("KNIME", result[0].name)
     assertEquals("Processing/KNIME", result[0].id)
-    assertTrue(result[0].hasChildren)
-    // Then the node
     assertEquals(NodeExplorerItemType.NODE, result[1].type)
-    assertEquals("Split Node", result[1].name)
+    assertEquals("Joint Node", result[1].name)
   }
 
   @Test
-  fun `getChildren for nested category path works correctly`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(
-      listOf("Processing/KNIME", "Processing/KNIME/Advanced")
-    )
-    val node = createEntity("org.test.FilterNode", "Filter Node", categories = listOf("Processing/KNIME"))
-    whenever(repository.findByCategoriesContaining(any())).thenReturn(listOf(node))
+  fun `getChildren with nested parentId returns deeper subtree`() {
+    val node = createEntity("org.test.AdvNode", "Advanced Node", categories = listOf("Processing/KNIME/Advanced"))
+    whenever(repository.findAll()).thenReturn(listOf(node))
 
     val result = service.getChildren("Processing/KNIME")
 
-    assertEquals(2, result.size)
-    assertEquals(NodeExplorerItemType.CATEGORY, result[0].type)
+    assertEquals(1, result.size)
     assertEquals("Advanced", result[0].name)
     assertEquals("Processing/KNIME/Advanced", result[0].id)
-    assertEquals(NodeExplorerItemType.NODE, result[1].type)
-    assertEquals("Filter Node", result[1].name)
+    assertEquals(1, result[0].children!!.size)
+    assertEquals("Advanced Node", result[0].children!![0].name)
   }
 
   @Test
-  fun `getChildren for category with no nodes returns empty`() {
-    whenever(repository.findAllDistinctCategories()).thenReturn(listOf("Transform"))
-    whenever(repository.findByCategoriesContaining(any())).thenReturn(emptyList())
+  fun `getChildren with non-existent parentId returns empty`() {
+    val node = createEntity("org.test.Node", "Some Node", categories = listOf("Processing"))
+    whenever(repository.findAll()).thenReturn(listOf(node))
 
     val result = service.getChildren("NonExistent")
 
     assertTrue(result.isEmpty())
   }
 
-  // --- search ---
+  // --- search — returns matching nodes in tree form ---
 
   @Test
-  fun `search returns matching nodes`() {
+  fun `search returns uncategorized matching node at root`() {
     val node = createEntity("org.test.CreateTableNode", "Create Table", description = "Creates a table")
     whenever(repository.searchNodes("%table%")).thenReturn(listOf(node))
 
@@ -202,6 +215,26 @@ class NodeExplorerServiceTest {
     assertEquals(NodeExplorerItemType.NODE, result[0].type)
     assertEquals("Create Table", result[0].name)
     assertEquals("org.test.CreateTableNode", result[0].id)
+  }
+
+  @Test
+  fun `search returns matching nodes nested under their categories`() {
+    val node = createEntity("org.test.FilterNode", "Filter Node", categories = listOf("Processing/KNIME"))
+    whenever(repository.searchNodes("%filter%")).thenReturn(listOf(node))
+
+    val result = service.search("filter")
+
+    // Result is a tree: Processing → KNIME → Filter Node
+    assertEquals(1, result.size)
+    assertEquals(NodeExplorerItemType.CATEGORY, result[0].type)
+    assertEquals("Processing", result[0].name)
+    val knime = result[0].children!!
+    assertEquals(1, knime.size)
+    assertEquals("KNIME", knime[0].name)
+    val nodes = knime[0].children!!
+    assertEquals(1, nodes.size)
+    assertEquals("Filter Node", nodes[0].name)
+    assertEquals(NodeExplorerItemType.NODE, nodes[0].type)
   }
 
   @Test

@@ -29,6 +29,7 @@ interface RegisteredNodeRepository : CrudRepository<RegisteredNodeEntity, Long> 
     SELECT * FROM registered_nodes
     WHERE node_manifest->>'title' ILIKE :pattern
        OR node_manifest->>'description' ILIKE :pattern
+       OR documentation_markdown ILIKE :pattern
        OR node_id ILIKE :pattern
   """)
   fun searchNodes(pattern: String): List<RegisteredNodeEntity>
