@@ -1,5 +1,7 @@
 package org.projectcontinuum.core.commons.activity
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.projectcontinuum.core.commons.model.ContinuumWorkflowModel
 import org.projectcontinuum.core.commons.model.PortData
 import io.temporal.activity.ActivityInterface
@@ -17,8 +19,8 @@ interface IContinuumNodeActivity {
     ERROR("\$error")
   }
 
-  data class NodeActivityOutput(
-    val nodeId: String,
-    val outputs: Map<String, PortData>
+  data class NodeActivityOutput @JsonCreator constructor(
+    @JsonProperty("nodeId") val nodeId: String,
+    @JsonProperty("outputs") val outputs: Map<String, PortData>
   )
 }
