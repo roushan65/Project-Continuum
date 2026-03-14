@@ -41,14 +41,26 @@ gradlePlugin {
         create("continuumFeature") {
             id = "org.projectcontinuum.feature"
             implementationClass = "org.projectcontinuum.gradle.ContinuumFeaturePlugin"
-            displayName = "Continuum Feature Plugin"
-            description = "Convention plugin for Continuum feature modules — applies Spring Boot, Kotlin, dependency management, and publishing"
+            displayName = "Continuum Feature Plugin (Kotlin)"
+            description = "Convention plugin for Continuum Kotlin feature modules — applies Spring Boot, Kotlin, dependency management, and publishing"
+        }
+        create("continuumFeatureJava") {
+            id = "org.projectcontinuum.feature-java"
+            implementationClass = "org.projectcontinuum.gradle.ContinuumFeatureJavaPlugin"
+            displayName = "Continuum Feature Plugin (Java)"
+            description = "Convention plugin for Continuum Java feature modules — applies Spring Boot, java-library, dependency management, and publishing"
         }
         create("continuumWorker") {
             id = "org.projectcontinuum.worker"
             implementationClass = "org.projectcontinuum.gradle.ContinuumWorkerPlugin"
-            displayName = "Continuum Worker Plugin"
-            description = "Convention plugin for Continuum worker modules — extends feature plugin with Spring Boot app, Jib, and worker starter"
+            displayName = "Continuum Worker Plugin (Kotlin)"
+            description = "Convention plugin for Continuum Kotlin worker modules — extends feature plugin with Spring Boot app, Jib, and worker starter"
+        }
+        create("continuumWorkerJava") {
+            id = "org.projectcontinuum.worker-java"
+            implementationClass = "org.projectcontinuum.gradle.ContinuumWorkerJavaPlugin"
+            displayName = "Continuum Worker Plugin (Java)"
+            description = "Convention plugin for Continuum Java worker modules — extends Java feature plugin with Spring Boot app, Jib, and worker starter"
         }
     }
 }

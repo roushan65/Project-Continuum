@@ -10,6 +10,9 @@ abstract class ContinuumExtension {
     /** Maven group ID for continuum core artifacts (commons, worker-starter) */
     abstract val continuumGroup: Property<String>
 
+    /** Whether to use Kotlin (true) or plain Java (false). Default: true */
+    abstract val useKotlin: Property<Boolean>
+
     /** Spring Boot BOM version */
     abstract val springBootVersion: Property<String>
 
